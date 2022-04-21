@@ -59,7 +59,6 @@
        repo: https://github.com/DanyMo20/gurux.git
        dest: /home/ubuntu/repo
        clone: yes
-       bare: yes
  
      
   - name: cd directory and execute command	
@@ -78,7 +77,6 @@
        repo: https://github.com/DanyMo20/gurux.git
        dest: /home/ubuntu/repo
        clone: yes
-       bare: yes
      
   - name: cd directory and execute command	
     command: chdir=/home/ubuntu/repo/gurux/gurux.dlms.client.example.java/ mvn clean package
