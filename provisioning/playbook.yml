@@ -1,0 +1,82 @@
+# This is an empty template playbook
+# You can write your custom configuration here
+
+- name: disable qxl
+  hosts:
+    - routers
+    - hosts
+  gather_facts: yes
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: disable qxl
+      include_role:
+        name: disable-qxl
+      when: ansible_os_family == 'Debian'
+
+
+- name: user access
+  hosts:
+    - user_accessible_nodes
+  gather_facts: no
+  become: yes
+  become_user: root
+  roles:
+    - role: kypo-user-access
+      kypo_user_access_password: 'kypo'
+
+- name: update apt and install maven
+  hosts:
+    - smart-meter
+    - concentrator
+  gather_facts: no
+  become: yes
+  become_user: root
+  tasks:
+  - name: update apt packages
+    become: yes
+    apt:
+      update_cache: yes
+      cache_valid_time: 86400 
+
+  - name: install maven
+    become: yes
+     apt: maven
+
+- name: smart-meter setup
+  hosts:
+    - smart-meter
+  gather_facts: no
+  become: yes
+  become_user: root
+  tasks: 
+  - name: clone gurux repository
+    become: yes
+    git:
+       repo: https://github.com/DanyMo20/gurux.git
+       dest: /home/ubuntu/
+       clone: yes
+       update: yes
+     
+  - name: cd directory and execute command	
+    command: chdir=/home/ubuntu/gurux/gurux.dlms.server.example.java/ mvn clean package
+
+- name: concentrator setup
+  hosts:
+    - concentrator
+  gather_facts: no
+  become: yes
+  become_user: root
+  tasks: 
+  - name: clone gurux repository
+    become: yes
+    git:
+       repo: https://github.com/DanyMo20/gurux.git
+       dest: /home/ubuntu/
+       clone: yes
+       update: yes
+     
+  - name: cd directory and execute command	
+    command: chdir=/home/ubuntu/gurux/gurux.dlms.client.example.java/ mvn clean package
+
