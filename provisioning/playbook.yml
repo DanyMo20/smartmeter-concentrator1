@@ -42,7 +42,9 @@
 
   - name: install maven
     become: yes
-     apt: maven
+    apt:
+      pkg:
+       - maven
 
 - name: smart-meter setup
   hosts:
