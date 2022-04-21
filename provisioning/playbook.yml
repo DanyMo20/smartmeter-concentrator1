@@ -26,7 +26,7 @@
     - role: kypo-user-access
       kypo_user_access_password: 'kypo'
 
-- name: update apt and install maven
+- name: Update apt and install maven
   hosts:
     - smart-meter
     - concentrator
@@ -34,50 +34,56 @@
   become: yes
   become_user: root
   tasks:
-  - name: update apt packages
+  - name: Update apt packages
     become: yes
     apt:
       update_cache: yes
       cache_valid_time: 86400 
 
-  - name: install maven
+  - name: Install maven
     become: yes
     apt:
       pkg:
        - maven
 
-- name: smart-meter setup
+- name: Smart-meter setup
   hosts:
     - smart-meter
   gather_facts: no
   become: yes
   become_user: root
   tasks: 
-  - name: clone gurux repository
+  - name: Clone gurux repository
     become: yes
     git:
        repo: https://github.com/DanyMo20/gurux.git
        dest: /home/ubuntu/repo
        clone: yes
- 
-     
-  - name: cd directory and execute command	
-    command: chdir=/home/ubuntu/repo/gurux/gurux.dlms.server.example.java/ mvn clean package
+  
+  - name: cd folder and mvn clean package	
+    command: mvn clean package
+    become: yes
+    become_user: root
+    args:
+      chdir: /home/ubuntu/repo/gurux/gurux.dlms.server.example.java/
 
-- name: concentrator setup
+- name: Concentrator setup
   hosts:
     - concentrator
   gather_facts: no
   become: yes
   become_user: root
   tasks: 
-  - name: clone gurux repository
+  - name: Clone gurux repository
     become: yes
     git:
        repo: https://github.com/DanyMo20/gurux.git
        dest: /home/ubuntu/repo
        clone: yes
      
-  - name: cd directory and execute command	
-    command: chdir=/home/ubuntu/repo/gurux/gurux.dlms.client.example.java/ mvn clean package
-
+  - name: cd folder and mvn clean package	
+    command: mvn clean package
+    become: yes
+    become_user: root
+    args:
+      chdir: /home/ubuntu/repo/gurux/gurux.dlms.server.example.java/
