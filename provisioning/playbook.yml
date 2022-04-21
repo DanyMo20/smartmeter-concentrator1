@@ -57,12 +57,13 @@
     become: yes
     git:
        repo: https://github.com/DanyMo20/gurux.git
-       dest: /home/ubuntu/
+       dest: /home/ubuntu/repo
        clone: yes
-       update: yes
+       bare: yes
+ 
      
   - name: cd directory and execute command	
-    command: chdir=/home/ubuntu/gurux/gurux.dlms.server.example.java/ mvn clean package
+    command: chdir=/home/ubuntu/repo/gurux/gurux.dlms.server.example.java/ mvn clean package
 
 - name: concentrator setup
   hosts:
@@ -75,10 +76,10 @@
     become: yes
     git:
        repo: https://github.com/DanyMo20/gurux.git
-       dest: /home/ubuntu/
+       dest: /home/ubuntu/repo
        clone: yes
-       update: yes
+       bare: yes
      
   - name: cd directory and execute command	
-    command: chdir=/home/ubuntu/gurux/gurux.dlms.client.example.java/ mvn clean package
+    command: chdir=/home/ubuntu/repo/gurux/gurux.dlms.client.example.java/ mvn clean package
 
